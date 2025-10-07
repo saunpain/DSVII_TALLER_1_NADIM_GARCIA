@@ -1,0 +1,38 @@
+[
+    {
+        "id": "2",
+        "nombre": "Cerevita",
+        "precio": "4.97",
+        "estado": "por_recibir",
+        "categoria": "alimento",
+        "fechaIngreso": "2024-09-10",
+        "fechaVencimiento": "2025-03-15"
+    },
+    {
+        "id": "3",
+        "nombre": "Camiseta Deportiva Nike",
+        "precio": "19.99",
+        "estado": "agotado",
+        "categoria": "ropa",
+        "fechaIngreso": "2024-07-20",
+        "talla": "M"
+    },
+    {
+        "id": 4,
+        "nombre": "Galleta Oreo",
+        "precio": "2",
+        "estado": "disponible",
+        "categoria": "alimento",
+        "fechaIngreso": "2025-10-07",
+        "fechaVencimiento": "2025-10-31"
+    },
+    {
+        "id": 5,
+        "nombre": "Laptop Dell XPS 15",
+        "precio": "498.99",
+        "estado": "disponible",
+        "categoria": "electronico",
+        "fechaIngreso": "2025-10-07",
+        "garantiaMeses": "24"
+    }
+]
