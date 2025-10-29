@@ -1,0 +1,142 @@
+# TALLER_8 — Sistema de Gestión de Biblioteca (MySQLi y PDO)
+
+## Requisitos
+- PHP 8.0+ (con `mysqli` y `pdo_mysql` habilitados)
+- MySQL/MariaDB
+- Servidor web local (Laragon/XAMPP/WAMP)
+- Navegador moderno
+
+## Estructura del proyecto
+TALLER_8/
+├── mysqli/
+│ ├── config.php
+│ ├── index.php
+│ ├── libros.php
+│ ├── usuarios.php
+│ └── prestamos.php
+├── pdo/
+│ ├── config.php
+│ ├── index.php
+│ ├── libros.php
+│ ├── usuarios.php
+│ └── prestamos.php
+└── README.md
+
+sql
+Copiar código
+
+## Base de datos (SQL)
+Ejecuta esto en MySQL:
+```sql
+CREATE DATABASE IF NOT EXISTS biblioteca_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE biblioteca_db;
+
+CREATE TABLE IF NOT EXISTS books (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  isbn VARCHAR(20) UNIQUE NOT NULL,
+  year INT NOT NULL,
+  quantity INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS loans (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  book_id INT NOT NULL,
+  loan_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  return_date DATETIME DEFAULT NULL,
+  returned TINYINT(1) NOT NULL DEFAULT 0,
+  CONSTRAINT fk_loans_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_loans_book FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+  INDEX (user_id),
+  INDEX (book_id)
+) ENGINE=InnoDB;
+Configuración rápida
+Importa el SQL anterior.
+
+Copia TALLER_8/ a tu servidor local (por ejemplo C:\laragon\www\TALLERES\TALLER_8).
+
+Edita credenciales:
+
+mysqli/config.php: DB_HOST, DB_USER, DB_PASS, DB_NAME
+
+pdo/config.php: DB_DSN, DB_USER, DB_PASS
+
+Abre en el navegador:
+
+http://localhost/TALLER_8/mysqli/
+
+http://localhost/TALLER_8/pdo/
+
+Funcionalidades
+Libros: crear, listar, buscar (título/autor/ISBN), actualizar, eliminar.
+
+Usuarios: registrar, listar, buscar (nombre/email), actualizar, eliminar.
+
+Préstamos: registrar préstamo, listar préstamos activos, devolver libro, ver historial por usuario.
+
+Paginación
+Parámetros de query: page (>=1) y per_page (1–100, por defecto 10).
+
+Implementada en listas de libros, usuarios y préstamos.
+
+Seguridad y buenas prácticas
+Consultas preparadas en todas las operaciones.
+
+Transacciones en operaciones críticas (prestar/devolver).
+
+Validación/saneamiento básico de entradas.
+
+Passwords: password_hash() en registro/edición.
+
+XSS: salida escapada con htmlspecialchars.
+
+Manejo de errores
+MySQLi: mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT) para lanzar excepciones.
+
+PDO: PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION.
+
+Mensajes simples al usuario
+
+Rutas principales
+MySQLi
+
+TALLER_8/mysqli/index.php
+
+TALLER_8/mysqli/libros.php
+
+TALLER_8/mysqli/usuarios.php
+
+TALLER_8/mysqli/prestamos.php
+
+PDO
+
+TALLER_8/pdo/index.php
+
+TALLER_8/pdo/libros.php
+
+TALLER_8/pdo/usuarios.php
+
+TALLER_8/pdo/prestamos.php
+
+Consideraciones especiales
+La interfaz es minimalista y funcional (sin frameworks).
+
+Para producción: añade autenticación por sesión, roles, validaciones más estrictas y protección CSRF.
+
+Si cambias per_page, respeta el límite máximo de 100 que ya está en el código.
+
+Comparación breve: MySQLi vs PDO
+PDO: API uniforme, manejo de excepciones por defecto, transacciones limpias, y portabilidad (cambiar de motor con mínimos cambios).
+
+MySQLi: específico de MySQL, un poco más de boilerplate (binds, manejo manual), pero directo si solo usarás MySQL.
